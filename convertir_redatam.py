@@ -1,23 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
+#USO: Bajar el archivo de redatam, convertirlo a formato xlsx, poner convertir_redatam.py en la misma carpeta y correrlo.
 
 import openpyxl
 import pandas as pd
 
-
-# In[3]:
-
-
 wb = openpyxl.load_workbook('reporte.xlsx')
 hoja = wb.active
 filas = hoja.max_row
-
-
-# In[4]:
-
 
 #Lista con los nombres de los radios censales
 radios = []
@@ -34,10 +25,6 @@ for i in range(1,filas):
     except:
             pass    
 
-
-# In[5]:
-
-
 #Busca las dos primera fila con radio:
 for i in range(1,filas):
     try:
@@ -52,18 +39,10 @@ for i in range(1,filas):
 #Cuántas filas tiene que ignorar entre uno y otro:
 salto = segundo - primero
 
-
-# In[6]:
-
-
 #Columas del DataFrame:
 columnasDF = ['link'] #'link' primero para el index. Después las categorías.
 for i in range(primero+3,segundo-2):
     columnasDF.append(hoja.cell(row = i, column = 1).value)
-
-
-# In[7]:
-
 
 #Armo diccionario del DF
 dictDF = {}
@@ -88,10 +67,6 @@ for f in range(len(filasRadios)):
     posicion += 1
     #print(posicion)
 
-
-# In[8]:
-
-
 #Defino el DataFrame
 datos = pd.DataFrame(dictDF)
 datos.set_index('link', inplace = True)
@@ -105,19 +80,11 @@ for col in datos.columns:
     if datos[col].dtype == 'object':
         datos[col] = datos[col].astype('float64')
 
-
-# In[9]:
-
-
 #Guardo como csv
 datos.to_csv('reporte.csv')
 
 #Guardo como pickle
 datos.to_pickle('reporte.pickle')
-
-
-# In[10]:
-
 
 #Guardo como excel
 datos.to_excel('reporte_table.xlsx')
